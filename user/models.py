@@ -1,5 +1,6 @@
 import datetime
 
+from django.core.cache import cache
 from django.db import models
 
 
@@ -56,6 +57,21 @@ class User(models.Model):
             'location': self.location,
             'age': self.age
         }
+
+    # def get_or_create_token(self):
+    #     """
+    #     为用户生成唯一的 token
+    #     :return:
+    #     """
+    #     key = 'token:{}'.format(self.id)
+    #
+    #     token = cache.get(key)
+    #
+    #     if not token:
+    #         token = 'token........1234123dsfsadfqesdf'
+    #         cache.set(key, token, 24 * 60 * 60)
+    #
+    #     return token
 
     class Meta:
         db_table = 'users'
