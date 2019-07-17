@@ -5,6 +5,7 @@ from common import errors, cache_keys
 from common.utils import is_phone_num
 from libs.http import render_json
 from user import logics
+from user.forms import ProfileForm
 from user.models import User
 
 
@@ -80,4 +81,12 @@ def get_profile(request):
 
 
 def set_profile(request):
-    return None
+    user = request.user
+
+    form = ProfileForm(data=request.POST, instance=user.profile)
+
+    if form.is_valid():
+        form.save()
+        return render_json()
+    else:
+        return render_json(data=form.errors)
