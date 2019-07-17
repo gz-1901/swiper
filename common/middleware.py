@@ -2,6 +2,7 @@ from django.utils.deprecation import MiddlewareMixin
 
 from common import errors
 from libs.http import render_json
+from user.models import User
 
 
 class AuthMiddleware(MiddlewareMixin):
@@ -30,6 +31,8 @@ class AuthMiddleware(MiddlewareMixin):
 
         if not uid:
             return render_json(code=errors.LOGIN_REQUIRED_ERR)
+
+        request.user = User.objects.get(pk=uid)
 
         # for k,v in request.META.items():
         #     print(k, v)

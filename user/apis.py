@@ -64,12 +64,20 @@ def login(request):
     # 设置登录状态
     request.session['uid'] = user.id
 
-
     # token 认证方式
     # 为当前登录用户生成一个 token，并且存储到 缓存中，key为：token:user.id，Value为：token
     # token = user.get_or_create_token()
     # data = {'token': token}
     # return render_json(data=data)
 
-
     return render_json(data=user.to_dict())
+
+
+def get_profile(request):
+    user = request.user
+
+    return render_json(data=user.profile.to_dict(exclude=['auto_play']))
+
+
+def set_profile(request):
+    return None
