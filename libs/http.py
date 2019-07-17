@@ -7,6 +7,14 @@ def render_json(code=errors.OK, data=None):
     """
     json 返回格式
 
+
+    {
+        "code": 0,
+        "data": {
+
+        },
+    }
+
     :param code: 错误码
     :param data: 接口数据
     :return:
