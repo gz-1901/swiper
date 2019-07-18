@@ -23,6 +23,7 @@ prompt-toolkit==2.0.9
 ptyprocess==0.6.0
 Pygments==2.4.2
 pytz==2019.1
+qiniu==7.2.6
 redis==3.2.1
 requests==2.22.0
 six==1.12.0
