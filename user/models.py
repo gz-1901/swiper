@@ -86,6 +86,7 @@ class User(models.Model):
     #     if not token:
     #         token = 'token........1234123dsfsadfqesdf'
     #         cache.set(key, token, 24 * 60 * 60)
+    #         cache.set(token, uid, 24 * 60 * 60)
     #
     #     return token
 

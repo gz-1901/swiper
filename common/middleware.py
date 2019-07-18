@@ -38,6 +38,11 @@ class AuthMiddleware(MiddlewareMixin):
         #     print(k, v)
 
         # token = request.META.get('HTTP_X_SWIPER_AHTU_TOKEN')
+        # uid = cache.get(token)
         #
-        # if not token:
+        # if not uid:
         #     return render_json(code=errors.LOGIN_REQUIRED_ERR)
+        #
+        # request.user = User.objects.get(pk=uid)
+
+

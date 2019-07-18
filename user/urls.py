@@ -7,4 +7,5 @@ urlpatterns = [
     path('login', apis.login),
     path('get-profile', apis.get_profile),
     path('set-profile', apis.set_profile),
+    path('upload-avatar', apis.upload_avatar),
 ]

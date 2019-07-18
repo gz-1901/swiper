@@ -5,6 +5,10 @@ from user.models import Profile
 
 class ProfileForm(forms.ModelForm):
 
+    # def clean(self):
+    #
+    #     return self.cleaned_data
+
     def clean_max_distance(self):
         max_distance = self.cleaned_data.get('max_distance')
         min_distance = self.cleaned_data.get('min_distance')
