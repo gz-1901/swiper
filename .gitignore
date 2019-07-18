@@ -1,5 +1,8 @@
+media/
 .idea
 .vscode
+
+.qiniu_pythonsdk_hostscache.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
