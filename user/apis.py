@@ -120,6 +120,6 @@ def upload_avatar(request):
     # else:
     #     return render_json(code=errors.AVATAR_UPLOAD_ERR)
 
-    logics.async_upload_avatar.delay(avatar)
+    logics.async_upload_avatar.delay(user, avatar)
 
     return render_json()
