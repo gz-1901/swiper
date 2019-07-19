@@ -19,3 +19,7 @@ QN_ACCESS_KEY = 'ktgbAUqxq6D2WZ0PXRhRY4s5TvW2W_NcpuspuhcG'
 QN_SECRET_KEY = 'XmsJZNH9LgCySF667ZtF-QZI1P6iI2tZXTwZw9ea'
 QN_BUCKET_NAME = 'swiper'
 QN_HOST = 'http://pu420clqe.bkt.clouddn.com'
+
+
+# 社交系统
+SWIPE_LIMIT = 3     # 每日滑动上限

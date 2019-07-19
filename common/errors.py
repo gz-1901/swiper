@@ -29,3 +29,28 @@ class LogicException(Exception):
 
     def __init__(self, code):
         self.code = code
+
+
+class LogicError(Exception):
+    code = None
+
+
+def gen_logic_error(name, code):
+    return type(name, (LogicError, ), {'code': code})
+
+
+# class SwipeError(LogicError):
+#     code = 3002
+
+
+SidError = gen_logic_error('SidError', 3001)
+SwipeError = gen_logic_error('SwipeError', 3002)
+SwipeLimitError = gen_logic_error('SwipeLimitError', 3003)
+
+
+"""
+
+raise LogicException(SWIPE_ERR)
+raise SwipeError
+
+"""

@@ -2,6 +2,7 @@ from common import errors
 from libs.http import render_json
 from social import logics
 from social.models import Swiped
+from user.models import User
 
 
 def recommend(request):
@@ -51,14 +52,29 @@ def dislike(request):
 
     sid = int(sid)
 
-    Swiped.swipe(uid=user.id, sid=sid, mark='dislike')
+    Swiped.swipe(uid=user.id, sid=sid, mark='dislike111')
 
     return render_json()
 
 
 def rewind(request):
-    return None
+    """
+    反悔接口
+    :param request:
+    :return:
+    """
+    user = request.user
+
+    logics.rewind(user)
+
+    return render_json()
 
 
 def liked_me(request):
-    return None
+    user = request.user
+
+    uid_list = logics.liked_me(user)
+
+    users = [u.to_dict() for u in User.objects.filter(id__in=uid_list)]
+
+    return render_json(data=users)
