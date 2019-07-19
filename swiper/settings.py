@@ -41,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'common.middleware.AuthMiddleware',
+    'common.middleware.LogicExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'swiper.urls'

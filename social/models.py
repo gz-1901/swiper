@@ -1,5 +1,9 @@
 from django.db import models
 
+from common import errors
+from common.errors import LogicException
+from social.managers import FriendManager
+
 
 class Swiped(models.Model):
     """
@@ -17,8 +21,77 @@ class Swiped(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     @classmethod
+    def swipe(cls, uid, sid, mark):
+        """
+        创建滑动记录，如果已经存在记录，则返回 False，否则 创建记录，返回 True
+        :param uid:
+        :param sid:
+        :param mark:
+        :return:
+        """
+        marks = [m for m, _ in cls.MARKS]
+
+        if mark not in marks:
+            raise LogicException(errors.SWIPE_ERR)
+
+        # cls.objects.update_or_create(uid=uid, sid=sid, mark=mark)
+
+        if cls.objects.filter(uid=uid, sid=sid, mark=mark).exists():
+            return False
+        else:
+            cls.objects.create(uid=uid, sid=sid, mark=mark)
+            return True
+
+    @classmethod
     def is_liked(cls, uid, sid):
         return cls.objects.filter(uid=uid, sid=sid, mark__in=['like', 'superlike']).exists()
 
     class Meta:
         db_table = 'swiped'
+
+
+class Friend(models.Model):
+    """
+    好友关系表
+
+    uid     fid
+    -------------------
+    1       12
+    1       23
+    2       34
+    3       78
+    12      1
+    23      1
+    34      2
+    78      3
+
+    uid1    uid2
+    -------------------
+    1       12
+    1       23
+    2       34
+    3       78
+
+    uid1, uid2 = (uid1, uid2) if uid1 < uid2 else (uid2, uid1)
+    """
+
+    uid1 = models.IntegerField()
+    uid2 = models.IntegerField()
+
+    objects = FriendManager()
+
+    @classmethod
+    def make_friends(cls, uid1, uid2):
+        """
+        建立好友关系
+
+        通过自定义 uid 排序规则，来组织好友关系，且一组好友关系只保存一份数据
+        :param uid1:
+        :param uid2:
+        :return:
+        """
+        uid1, uid2 = (uid1, uid2) if uid1 < uid2 else (uid2, uid1)
+        return cls.objects.get_or_create(uid1=uid1, uid2=uid2)
+
+    class Meta:
+        db_table = 'friends'

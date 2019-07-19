@@ -1,6 +1,6 @@
 import datetime
 
-from social.models import Swiped
+from social.models import Swiped, Friend
 from user.models import User
 
 
@@ -31,9 +31,36 @@ def recommend_users(user):
 
 
 def like_someone(uid, sid):
-
-    Swiped.objects.create(uid=uid, sid=sid, mark='like')
+    """
+    喜欢操作，如果被滑动人，喜欢当前用户，则创建好友关系
+    :param uid:
+    :param sid:
+    :return:
+    """
+    ret = Swiped.swipe(uid=uid, sid=sid, mark='like')
 
     # 如果 sid 喜欢 uid，则进行加好友操作
-    if Swiped.is_liked(sid, uid):
-        print('+++++ friend +++++')
+    if ret and Swiped.is_liked(sid, uid):
+        _, created = Friend.make_friends(sid, uid)
+        # 发送 匹配好友成功的 推送消息
+        return created
+    else:
+        return False
+
+
+def superlike_someone(uid, sid):
+    """
+    超级喜欢操作，如果被滑动人，喜欢当前用户，则创建好友关系
+    :param uid:
+    :param sid:
+    :return:
+    """
+    ret = Swiped.swipe(uid=uid, sid=sid, mark='superlike')
+
+    # 如果 sid 喜欢 uid，则进行加好友操作
+    if ret and Swiped.is_liked(sid, uid):
+        # Friend.make_friends(sid, uid)
+        _, created = Friend.objects.make_friends(sid, uid)
+        return created
+    else:
+        return False
