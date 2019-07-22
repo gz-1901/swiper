@@ -38,7 +38,7 @@ class Swiped(models.Model):
 
         # cls.objects.update_or_create(uid=uid, sid=sid, mark=mark)
 
-        if cls.objects.filter(uid=uid, sid=sid, mark=mark).exists():
+        if cls.objects.filter(uid=uid, sid=sid).exists():
             return False
         else:
             cls.objects.create(uid=uid, sid=sid, mark=mark)
