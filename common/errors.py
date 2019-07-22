@@ -43,9 +43,15 @@ def gen_logic_error(name, code):
 #     code = 3002
 
 
+# 社交系统
 SidError = gen_logic_error('SidError', 3001)
 SwipeError = gen_logic_error('SwipeError', 3002)
 SwipeLimitError = gen_logic_error('SwipeLimitError', 3003)
+
+
+
+# VIP 系统
+VipPermError = gen_logic_error('VipPermError', 4001)    # 权限错误
 
 
 """
