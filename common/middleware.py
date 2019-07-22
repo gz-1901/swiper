@@ -1,3 +1,6 @@
+import logging
+import traceback
+
 from django.utils.deprecation import MiddlewareMixin
 
 from common import errors
@@ -47,7 +50,13 @@ class AuthMiddleware(MiddlewareMixin):
         # request.user = User.objects.get(pk=uid)
 
 
+err_logger = logging.getLogger('err')
+
+
 class LogicExceptionMiddleware(MiddlewareMixin):
     def process_exception(self, request, exception):
         if isinstance(exception, (LogicException, LogicError)):
             return render_json(code=exception.code)
+        else:
+            err_logger.error(traceback.format_exc())
+            return render_json(code=errors.ERR)

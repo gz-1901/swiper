@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 
@@ -11,6 +12,8 @@ from libs.http import render_json
 from user import logics
 from user.forms import ProfileForm
 from user.models import User
+
+logger = logging.getLogger('inf')
 
 
 def verify_phone(request):
@@ -68,6 +71,8 @@ def login(request):
 
     # 设置登录状态
     request.session['uid'] = user.id
+
+    logger.info('user.login, uid: {}'.format(user.id))
 
     # token 认证方式
     # 为当前登录用户生成一个 token，并且存储到 缓存中，key为：token:user.id，Value为：token
