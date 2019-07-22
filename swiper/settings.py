@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.staticfiles',
     'user.apps.UserConfig',
+    'social.apps.SocialConfig',
 ]
 
 MIDDLEWARE = [
@@ -40,6 +41,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'common.middleware.AuthMiddleware',
+    'common.middleware.LogicExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'swiper.urls'
