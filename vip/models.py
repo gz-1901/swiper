@@ -1,7 +1,9 @@
 from django.db import models
 
+from libs.orm import ModelToDictMixin
 
-class Vip(models.Model):
+
+class Vip(models.Model, ModelToDictMixin):
     """
     会员
     """
@@ -40,7 +42,7 @@ class Vip(models.Model):
         db_table = 'vips'
 
 
-class Permission(models.Model):
+class Permission(models.Model, ModelToDictMixin):
     """
     权限
     """
