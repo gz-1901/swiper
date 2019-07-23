@@ -36,7 +36,7 @@ class AuthMiddleware(MiddlewareMixin):
         if not uid:
             return render_json(code=errors.LOGIN_REQUIRED_ERR)
 
-        request.user = User.objects.get(pk=uid)
+        request.user = User.get(pk=uid)
 
         # for k,v in request.META.items():
         #     print(k, v)
@@ -47,7 +47,7 @@ class AuthMiddleware(MiddlewareMixin):
         # if not uid:
         #     return render_json(code=errors.LOGIN_REQUIRED_ERR)
         #
-        # request.user = User.objects.get(pk=uid)
+        # request.user = User.get(pk=uid)
 
 
 err_logger = logging.getLogger('err')

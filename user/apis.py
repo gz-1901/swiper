@@ -67,7 +67,7 @@ def login(request):
     #     user = User.objects.cereate(phonenum=phone_num)
 
     # 如果存在 记录，则 get，否则 create
-    user, created = User.objects.get_or_create(phonenum=phone_num)
+    user, created = User.get_or_create(phonenum=phone_num)
 
     # 设置登录状态
     request.session['uid'] = user.id

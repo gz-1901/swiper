@@ -1,3 +1,4 @@
+from django.db import models
 from django.core.cache import cache
 
 from common import cache_keys
@@ -104,3 +105,21 @@ def get_or_create(cls, defaults=None, **kwargs):
     cache.set(key, model_obj)
 
     return model_obj, created
+
+
+def save(self, force_insert=False, force_update=False, using=None,
+         update_fields=None):
+    self._save(force_insert=False, force_update=False, using=None,
+               update_fields=None)
+
+    # 保存成功后，将数据更新至缓存
+    key = cache_keys.MODEL_PERFIX.format(self.__class__.__name__, self.pk)
+    cache.set(key, self)
+
+
+def model_path():
+    models.Model.get = get
+    models.Model.get_or_create = get_or_create
+
+    models.Model._save = models.Model.save
+    models.Model.save = save

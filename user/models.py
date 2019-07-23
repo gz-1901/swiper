@@ -55,21 +55,21 @@ class User(models.Model):
     @property
     def profile(self):
         if not hasattr(self, '_profile'):
-            self._profile, _ = Profile.objects.get_or_create(pk=self.id)
+            self._profile, _ = Profile.get_or_create(pk=self.id)
 
         return self._profile
 
     @property
     def vip(self):
         if not hasattr(self, '_vip'):
-            self._vip = Vip.objects.get(pk=self.vip_id)
+            self._vip = Vip.get(pk=self.vip_id)
 
         return self._vip
 
     # @property
     # def config(self):
     #     if not hasattr(self, '_config'):
-    #         self._config, _ = Config.objects.get_or_create(pk=self.id)
+    #         self._config, _ = Config.get_or_create(pk=self.id)
     #
     #     return self._config
 
@@ -132,7 +132,7 @@ class Profile(models.Model, ModelToDictMixin):
     #     p = cache.get(profile_key)
     #
     #     if p is None:
-    #         p = cls.objects.get(pk=pk)
+    #         p = cls.get(pk=pk)
     #         cache.set(profile_key, p)
     #
     #     return p
