@@ -1,6 +1,7 @@
 media/
 .idea
 .vscode
+logs/
 
 .qiniu_pythonsdk_hostscache.json
 
