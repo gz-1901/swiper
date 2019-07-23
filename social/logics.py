@@ -3,6 +3,7 @@ import datetime
 from django.core.cache import cache
 
 from common import cache_keys, errors, config
+from libs.cache import rds
 from social.models import Swiped, Friend
 from user.models import User
 
@@ -43,10 +44,13 @@ def like_someone(uid, sid):
     ret = Swiped.swipe(uid=uid, sid=sid, mark='like')
 
     # 如果 sid 喜欢 uid，则进行加好友操作
-    if ret and Swiped.is_liked(sid, uid):
-        _, created = Friend.make_friends(sid, uid)
-        # 发送 匹配好友成功的 推送消息
-        return created
+    if ret:
+        # 如果滑动成功，则进行滑动积分更新操作
+        update_swipe_score(sid, 'like')
+        if Swiped.is_liked(sid, uid):
+            _, created = Friend.make_friends(sid, uid)
+            # 发送 匹配好友成功的 推送消息
+            return created
     else:
         return False
 
@@ -61,10 +65,12 @@ def superlike_someone(uid, sid):
     ret = Swiped.swipe(uid=uid, sid=sid, mark='superlike')
 
     # 如果 sid 喜欢 uid，则进行加好友操作
-    if ret and Swiped.is_liked(sid, uid):
-        # Friend.make_friends(sid, uid)
-        _, created = Friend.objects.make_friends(sid, uid)
-        return created
+    if ret:
+        update_swipe_score(sid, 'superlike')
+        if Swiped.is_liked(sid, uid):
+            # Friend.make_friends(sid, uid)
+            _, created = Friend.objects.make_friends(sid, uid)
+            return created
     else:
         return False
 
@@ -109,3 +115,39 @@ def liked_me(user):
     liked_me_uid_list = [s.uid for s in swipe_list]
 
     return liked_me_uid_list
+
+
+def update_swipe_score(sid, mark):
+    score = config.SWIPE_SCORES.get(mark, 0)
+
+    rds.zincrby(cache_keys.HOT_RANK, score, sid)
+
+
+def get_top_rank(num):
+    origin_data = rds.zrevrange('hot_rank', 0, num - 1, withscores=True)
+    rank_data = [[int(uid), int(score)] for uid, score in origin_data]
+
+    user_rank = []
+
+    # 单个获取用户数据
+    # for uid, score in rank_data:
+    #     user = User.get(pk=uid)
+    #     user_dict = user.to_dict()
+    #     user_dict['score'] = score
+    #
+    #     user_rank.append(user_dict)
+
+    # # 批量获取用户数据
+    uid_list = [uid for uid, _ in rank_data]
+
+    users = User.objects.filter(id__in=uid_list)
+
+    sorted_users = sorted(users, key=lambda user: uid_list.index(user.id))
+
+    for user, (_, score) in zip(sorted_users, rank_data):
+        user_dict = user.to_dict()
+        user_dict['score'] = score
+
+        user_rank.append(user_dict)
+
+    return user_rank

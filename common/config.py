@@ -20,6 +20,12 @@ QN_SECRET_KEY = 'XmsJZNH9LgCySF667ZtF-QZI1P6iI2tZXTwZw9ea'
 QN_BUCKET_NAME = 'swiper'
 QN_HOST = 'http://pu420clqe.bkt.clouddn.com'
 
-
 # 社交系统
-SWIPE_LIMIT = 3     # 每日滑动上限
+SWIPE_LIMIT = 3  # 每日滑动上限
+SWIPE_SCORES = {
+    'like': 5,
+    'superlike': 8,
+    'dislike': 0
+}
+
+

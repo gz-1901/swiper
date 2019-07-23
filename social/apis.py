@@ -1,4 +1,5 @@
 from common import errors
+from libs.cache import rds
 from libs.http import render_json
 from social import logics
 from social.models import Swiped
@@ -54,7 +55,10 @@ def dislike(request):
 
     sid = int(sid)
 
-    Swiped.swipe(uid=user.id, sid=sid, mark='dislike111')
+    ret = Swiped.swipe(uid=user.id, sid=sid, mark='dislike')
+
+    if ret:
+        logics.update_swipe_score(sid, 'dislike')
 
     return render_json()
 
@@ -82,3 +86,10 @@ def liked_me(request):
     users = [u.to_dict() for u in User.objects.filter(id__in=uid_list)]
 
     return render_json(data=users)
+
+
+def top_rank(request):
+
+    user_rank = logics.get_top_rank(10)
+
+    return render_json(data=user_rank)
