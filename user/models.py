@@ -127,5 +127,19 @@ class Profile(models.Model, ModelToDictMixin):
 
     auto_play = models.BooleanField(default=True)
 
+    # @classmethod
+    # def get(cls, pk):
+    #     p = cache.get(profile_key)
+    #
+    #     if p is None:
+    #         p = cls.objects.get(pk=pk)
+    #         cache.set(profile_key, p)
+    #
+    #     return p
+
+    # def set(self):
+    #     self.save()
+    #     cache.set(profile_key, self)
+
     class Meta:
         db_table = 'profiles'
