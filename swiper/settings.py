@@ -73,6 +73,20 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            # "PASSWORD": "mysecret",
+            "PICKLE_VERSION": -1,
+            "SOCKET_CONNECT_TIMEOUT": 5,  # 连接超时时间
+            "SOCKET_TIMEOUT": 5,  # 获取数据超时时间
+        }
+    }
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -125,7 +139,7 @@ LOGGING = {
             'when': 'D',  # 每天切割日志
             'backupCount': 30,  # 日志保留 30 天
             'formatter': 'simple',
-            'level': 'INFO',
+            'level': 'DEBUG' if DEBUG else 'INFO',
         },
         'error': {
             'class': 'logging.handlers.TimedRotatingFileHandler',
@@ -144,7 +158,7 @@ LOGGING = {
         'inf': {
             'handlers': ['info'],
             'propagate': True,
-            'level': 'INFO',
+            'level': 'DEBUG' if DEBUG else 'INFO',
         },
         'err': {
             'handlers': ['error'],

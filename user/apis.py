@@ -86,7 +86,21 @@ def login(request):
 def get_profile(request):
     user = request.user
 
-    return render_json(data=user.profile.to_dict(exclude=['auto_play']))
+    # 1、从缓存中获取 profile_data，直接返回
+    key = cache_keys.PROFILE_DATA_PREFIX.format(user.id)
+    profile_data = cache.get(key)
+    logger.debug('get from cache')
+
+    # 2、如果缓存中不存在，则从数据库中获取
+    if profile_data is None:
+        profile_data = user.profile.to_dict(exclude=['auto_play'])
+        logger.debug('get from db')
+
+        # 3、将数据库中获取的 profile_data 更新至缓存
+        cache.set(key, profile_data)
+        logger.debug('set to cache')
+
+    return render_json(data=profile_data)
 
 
 def set_profile(request):
@@ -95,7 +109,14 @@ def set_profile(request):
     form = ProfileForm(data=request.POST, instance=user.profile)
 
     if form.is_valid():
-        form.save()
+        profile = form.save()
+
+        profile_data = profile.to_dict(exclude=['auto_play'])
+
+        # 更新成功后，将新数据设置到缓存中
+        key = cache_keys.PROFILE_DATA_PREFIX.format(profile.id)
+        cache.set(key, profile_data)
+
         return render_json()
     else:
         return render_json(data=form.errors)
