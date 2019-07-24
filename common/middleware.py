@@ -24,6 +24,7 @@ class AuthMiddleware(MiddlewareMixin):
         :return:
         """
         WHITE_LIST = [
+            '/api/vip/info',
             '/api/user/verify-phone',
             '/api/user/login'
         ]
